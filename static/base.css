@@ -1,0 +1,16 @@
+html,body {
+  margin: 0px;
+  background: #000;
+  font-family: monospace;
+  color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
