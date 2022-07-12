@@ -1,12 +1,17 @@
 
 type ITimeline = {
   time: Date,
-  overpayment: { one_time: number, recurring: number }
+  overpayment: { onetime: number, recurring: number }
   base_payment: number,
   interest_paid: number,
   interest_rate: number,
   balance: number,
   start_balance: number,
+  frame_changes: {
+    overpayment_onetime: number,
+    overpayment_recurring: number,
+    interest_rate: number
+  },
 }[];
 
 const minimumRepayment = (interest_rate: number, principle: number, months: number) => {
@@ -27,8 +32,6 @@ const createMortgageTimeline = (mortgage: any, frames: any): ITimeline => {
   const frame_settings = frames[context.frame];
 
   while (true) {
-    // Clear one time frame settings
-
     const minimum_repayment = minimumRepayment(
       frame_settings.interest_rate,
       mortgage.principle,
@@ -46,24 +49,32 @@ const createMortgageTimeline = (mortgage: any, frames: any): ITimeline => {
     // Apply overpayment(s)
     context.balance -= frame_settings.overpayment_onetime + frame_settings.overpayment_recurring;
 
-    // Move to next month
-    context.month++;
+    const current_frame_settings = frames[context.frame].interval === context.month ? frames[context.frame] : {};
 
     timeline.push({
-      time: new Date(context.date.setMonth(context.date.getMonth()+1)),
+      time: new Date(context.date.setMonth(context.date.getMonth()+1)).getTime(),
       overpayment: {
-        one_time: frame_settings.overpayment_onetime,
+        onetime: frame_settings.overpayment_onetime,
         recurring: frame_settings.overpayment_recurring,
       },
       interest_rate: frame_settings.interest_rate,
       base_payment: minimum_repayment,
       interest_paid: interest,
       start_balance: start_balance,
-      balance: context.balance
+      balance: context.balance,
+      frame_changes: {
+        overpayment_onetime: current_frame_settings.overpayment_onetime,
+        overpayment_recurring: current_frame_settings.overpayment_recurring,
+        interest_rate: current_frame_settings.interest_rate
+      },
     });
 
     // Move to next frame if month is at next frame interval
     frame_settings.overpayment_onetime = 0;
+
+    // Move to next month
+    context.month++;
+
     if(context.month >= frames[context.frame + 1]?.interval) {
       context.frame++;
 
@@ -71,7 +82,6 @@ const createMortgageTimeline = (mortgage: any, frames: any): ITimeline => {
       const new_frame = frames[context.frame];
 
       for (const key in new_frame) {
-        console.log(new_frame[key])
         if(new_frame[key] !== 'undefined' && new_frame[key] !== null) {
           frame_settings[key] = new_frame[key];
         }

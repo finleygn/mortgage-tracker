@@ -29,8 +29,16 @@ const Lock = ({ error }) => {
   const padding = unlock.split("").reduce((acc, item) => item === "#" ? acc+1 : acc, 0);
   const removed = unlock.replace("#".repeat(padding), "*".repeat(item.length).padEnd(padding, " "));
 
+  const bodyclick = () => {
+    ref.current.focus();
+  }
+
   useEffect(() => {
-    setColor("white")
+    setColor("white");
+    window.addEventListener("click", bodyclick);
+    return () => {
+      window.removeEventListener("click", bodyclick);
+    }
   }, [])
 
   return (
