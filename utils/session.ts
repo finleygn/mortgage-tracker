@@ -1,5 +1,6 @@
 import { getCookies } from "https://deno.land/std@0.146.0/http/cookie.ts";
 import { Session } from "../data/data.ts";
+import envConfig from '../config.ts';
 import createCookieString from "./createCookieString.ts";
 import sessionGenerator from "./sessionGenerator.ts";
 
@@ -20,7 +21,7 @@ export const logout = async (request) => {
     value: "",
     expires: new Date(1970, 1, 1).toUTCString(),
     name: "_session",
-    domain: url.hostname
+    domain: envConfig.hostname
   }));
   response.headers.set("Location", "/unlock")
 
@@ -41,7 +42,7 @@ export const login = async (request) => {
     name: "_session",
     value: sessionId,
     httpOnly: true,
-    domain: url.hostname,
+    domain: envConfig.hostname,
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toUTCString()
   }));
 

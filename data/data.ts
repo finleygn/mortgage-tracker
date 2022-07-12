@@ -1,11 +1,11 @@
 import { Database, SQLite3Connector, Relationships } from 'https://deno.land/x/denodb/mod.ts';
-
+import envConfig from '../config.ts';
 import Frame from './models/Frame.ts';
 import Mortgage from './models/Mortgage.ts';
 import Session from './models/Session.ts';
 
 const connection = new SQLite3Connector({
-  filepath: './local.db'
+  filepath: envConfig.database
 });
 
 const db = new Database(connection);

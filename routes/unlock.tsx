@@ -5,6 +5,7 @@ import { Head } from "$fresh/runtime.ts";
 import { Handlers } from "$fresh/server.ts";
 
 import Lock from "../islands/lock.tsx";
+import envConfig from '../config.ts';
 import { login } from "../utils/session.ts";
 import createCookieString from "../utils/createCookieString.ts";
 import { Session } from "../data/data.ts";
@@ -14,7 +15,7 @@ export const handler: Handlers<any | null> = {
     const body = await request.text();
     const pw = body.split("pw=")[1];
     
-    if(pw !== Deno.env.get("PASSWORD")) {
+    if(pw !== envConfig.password) {
       return ctx.render({ error: true });
     }
 

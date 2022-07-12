@@ -6,6 +6,7 @@
 
 import { InnerRenderFunction, RenderContext, start } from "$fresh/server.ts";
 import manifest from "./fresh.gen.ts";
+import envConfig from './config.ts';
 
 import { config, setup } from "@twind";
 import { virtualSheet } from "twind/sheets";
@@ -30,4 +31,4 @@ function render(ctx: RenderContext, render: InnerRenderFunction) {
   ctx.state.set("twind", newSnapshot);
 }
 
-await start(manifest, { render, port: 4231 });
+await start(manifest, { render, port: envConfig.port });
