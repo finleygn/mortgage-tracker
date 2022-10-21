@@ -1,6 +1,8 @@
-mortage
+# Mortgage Tracker
 
-## daily interest from mortgage provider
+Needs improvement but works for my personal use for the moment
+
+## daily interest calculation from mortgage provider (still to implement)
 
 ```
 How we calculate daily interest
@@ -21,9 +23,6 @@ Someone owes £100,000 on 1st June, and on 16th June they make a payment of £20
 £162,000.0000 / 365 = £443.8356
 
 Total interest charge for June = £443.84
+
+for overpayments u can just take away from the base interest rate again 
 ```
-
-our first month would be: `((190000 * (0.0263) * 30) - (832.58 * 0.0263 * 21)) / 365`
-first month payed on the 10th june
-
-i think for overpayments u can just take away from the base interest rate again maybe
